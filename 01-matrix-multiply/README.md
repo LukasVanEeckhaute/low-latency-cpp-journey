@@ -5,15 +5,12 @@ in C++ have a very different preformance despite preforming the same calculation
 The goal is to understand how memory acces paterns, cache locality and loop ordering
 affect execution time on a modern CPU
 
-## Implementations
-We've got a matrix multiplication a * b = output where a is the first operand, b the second and output is the 
-multiplied matrix.
-
 The project compares three different implementations of matrix multiplication:
 - Naive i-j-k multiplication
 - Reordered i-k-j multiplication
 - Tiled matrix multiplication
 
+# Matrix layout
 All matrices are stored as std::arrays.
 For example a 3x3 matrix A:
 
@@ -32,19 +29,9 @@ is stored as:
 ```
 For an NxN matrix A, A[row][column] becomes A[N*row + column]
 
-## i-j-k indexing
-
-i stands for row, j for column and k is an index to select the sum term.
-For 2 3x3 matrices a,b and output = a x b: output[row,column] = a[row,0]*b[0,column] + a[row,1]*b[1,column] + a[row,2]*b[2,column] 
-where k loops from 0 to 2 while row and column stay constant. 
-
-
-if row = 1, column = 2 and k = 0:
-we contribute to output[1][2] by adding a[1][0]*b[0][2] to it. 
-
-
 ## Naive i-j-k multiplication
 This is the most straightforward way of multiplying two matrices (exactly like you'd do on paper).
+
 For two `3×3` matrices `a` and `b`, with `output = a × b`:
 `output[row, column] = a[row, 0] * b[0, column] + a[row, 1] * b[1, column] + a[row, 2] * b[2, column]`
 Here, `k` loops from `0` to `2` while `row` and `column` stay constant.
