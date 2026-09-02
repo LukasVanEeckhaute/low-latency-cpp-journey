@@ -2,6 +2,9 @@
 
 template<std::size_t N>
 std::array<int,N*N> tiled(const std::array<int,N*N>& a, const std::array<int,N*N>& b, int tilesize){
+    if((tilesize <= 0) || (tilesize > N)){
+        throw std::invalid_argument("Tilesize out of range");
+    }
 
     std::array<int,N*N> output{};
     //looping tiles

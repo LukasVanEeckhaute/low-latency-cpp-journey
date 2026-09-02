@@ -28,7 +28,8 @@ int main(void){
     std::array<int,16> test4 = {5,2,9,3,4,8,2,9,6,7,6,3,1,0,2,2};
     auto testtiled = tiled<4>(test3,test4,3);
 
-    matrix_print<3>(testnaive);
-    matrix_print<3>(testikj);
-    matrix_print<4>(testtiled);
+    std::array<int,16> a = {5,6,9,0,2,2,6,7,1,3,4,4,8,3,0,1};
+    std::array<int,16> b = {2,1,0,9,7,6,2,9,5,5,2,4,6,3,9,4};
+    auto output = tiled<4>(a,b,2);
+    matrix_print<4>(output);
 }
