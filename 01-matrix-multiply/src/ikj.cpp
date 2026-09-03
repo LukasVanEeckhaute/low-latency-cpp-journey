@@ -1,4 +1,4 @@
-#include <array>
+#include "multiplications.hpp"
 
 std::vector<int> ikj(const std::vector<int>& a, const std::vector<int>& b, int N){
     std::vector<int> output(N*N);

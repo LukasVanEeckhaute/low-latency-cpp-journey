@@ -1,4 +1,4 @@
-#include <random>
+#include "benchmark.hpp"
 
 std::vector<int> generate_matrix(unsigned int seed, int N){
     std::mt19937 engine(seed);

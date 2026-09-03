@@ -1,9 +1,6 @@
-#include <chrono>
-#include <numeric>
-#include <algorithm>
-using namespace std::chrono;
+#include "benchmark.hpp"
 
-std::array<microseconds,3> Benchmark(const std::vector<int>& a, const std::vector<int>& b, std::string type, int repeats, int N, int tilesize = 0){
+std::array<microseconds,3> Benchmark(const std::vector<int>& a, const std::vector<int>& b, std::string type, int repeats, int N, int tilesize){
     
     microseconds median;
     microseconds max;
@@ -30,7 +27,7 @@ std::array<microseconds,3> Benchmark(const std::vector<int>& a, const std::vecto
             auto end = steady_clock::now();
             auto duration = duration_cast<microseconds>(end - start);
             durations[i] = duration;
-        }
+        }  
     }
     else if(type == "tiled"){
         //benchmark
@@ -62,14 +59,13 @@ std::array<microseconds,3> Benchmark(const std::vector<int>& a, const std::vecto
         auto lower = durations[mid-1];
         median = (upper + lower)/2;
     }
-    std::cout<<type<<" benchmark with "<<repeats<<" repeats\n";
-    if(type == "tiled") std::cout<<"Tilesize= "<<tilesize<<"\n";
-    std::cout<<"Median time= "<<median.count()<<" microseconds\n\n";
+    // std::cout<<type<<" benchmark of matrix size "<<N<<" with "<<repeats<<" repeats\n";
+    // if(type == "tiled") std::cout<<"Tilesize= "<<tilesize<<"\n";
+    // std::cout<<"Median time= "<<median.count()<<" microseconds\n\n";
     
     arr[0] = min;
     arr[1] = median;
     arr[2] = max;
-
-    //makes sure the compiler actually does the multiplication
+    
     return arr;
 }   

@@ -86,3 +86,16 @@ A (4x4 matrix divided by 3x3 tiles)
 ```
 
 ## Benchmarking methodology
+The multiplication is done on an AMD Ryzen AI 9 365 w/ Radeon 880M and 32GB RAM and code is compiled by GCC compiler at optimization level -O3. 
+
+The matrix sizes go from N=100 all the way up to N=1000 and for fixed matrix sizes the tilesize is also changed for the tiled multiplication (8-16-32-64-128 - ... - N/2). 
+
+The benchmark is done 20 times for each matrixsize and the median runtime is used to reduce the influence of scheduling noise and outliers.
+
+To measure the runtime, std::chrono::steady_clock is used. Only the matrix multiplication is timed and all timings are measured in microseconds. 
+
+The result of the multiplication is used after timing so the multiplication could not be optimized away by the compiler.
+
+The tested matrices are randomly generated using `<random>` and for a given matrix size N, the matrices tested for the different methods are all the same. 
+
+## Results

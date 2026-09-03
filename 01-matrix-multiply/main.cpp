@@ -3,11 +3,9 @@
 #include <chrono>
 using namespace std::chrono;
 
-#include "src/naive.cpp"
-#include "src/ikj.cpp"
-#include "src/tiled.cpp"
-#include "src/generator.cpp"
-#include "src/benchmark.cpp"
+#include "multiplications.hpp"
+#include "benchmark.hpp"
+#include "csv.hpp"
 
 void print_matrix(const std::vector<int> &matrix, int N){
     std::cout<<"Matrix of size "<<N<<"x"<<N<<"\n";
@@ -21,11 +19,27 @@ void print_matrix(const std::vector<int> &matrix, int N){
 }
 
 int main(void){
-    std::vector<int> a = generate_matrix(232323, 1000);
-    std::vector<int> b = generate_matrix(1111, 1000);
 
-    auto result1 = Benchmark(a,b,"naive",10,1000);
-    auto result2 = Benchmark(a,b,"ikj",10,1000);
-    auto result3 = Benchmark(a,b,"tiled",10,1000,64);
+    int seed = 10;
+    std::vector<BenchmarkResult> results;
+    for(int N = 100; N<= 1000; N += 50){
+        std::vector<int> a = generate_matrix(seed, N);
+        std::vector<int> b = generate_matrix(seed, N);
 
+        auto naive = Benchmark(a,b,"naive",20,N);
+        BenchmarkResult naive_result = {"naive",N,naive[1]};
+        results.push_back(naive_result);
+
+        auto ikj = Benchmark(a,b,"ikj",20,N);
+        BenchmarkResult ikj_result = {"ikj",N,ikj[1]};
+        results.push_back(ikj_result);
+
+        for(int tilesize = 8; tilesize < N/2; tilesize = 2*tilesize){
+            auto tiled = Benchmark(a,b,"tiled",20,N,tilesize);
+            BenchmarkResult tiled_result = {"tiled",N,tiled[1],tilesize};
+            results.push_back(tiled_result);
+        }
+        seed += 1;
+    }
+    int check = csv_write(results);
 }
