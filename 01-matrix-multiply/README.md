@@ -10,8 +10,8 @@ The project compares three different implementations of matrix multiplication:
 - Reordered i-k-j multiplication
 - Tiled matrix multiplication
 
-# Matrix layout
-All matrices are stored as std::arrays.
+## Matrix layout
+All matrices are stored as std::vectors.
 For example a 3x3 matrix A:
 
 ```text
@@ -27,7 +27,7 @@ is stored as:
   row 0     row 1     row 2
 
 ```
-For an NxN matrix A, A[row][column] becomes A[N*row + column]
+For an `NxN` matrix `A`, `A[row][column]` becomes `A[N*row + column]`.
 
 ## Naive i-j-k multiplication
 This is the most straightforward way of multiplying two matrices (exactly like you'd do on paper).
@@ -47,14 +47,14 @@ For 2 3x3 matrices a,b and output = a x b:
 Now we contribute to three different output elements in the inner loop.
 `output[row,0] += a[row,k]**b[k,0], output[row,1] += a[row,k]**b[k,1] and output[row,2] += a[row,k]*b[k,2]`
 
-The preformance of this algorithm is better than the naive algorithm because as you can see it accesses memory stored next to eachother in the array like `b[k*N]->b[k*N + 1]->b[k*N +2]`. These elements are already in cache while accessed because the memory block has been accessed before which makes it way faster.
+The performance of this algorithm is better than the naive algorithm because as you can see it accesses memory stored next to eachother in the array like `b[k*N]->b[k*N + 1]->b[k*N +2]`. These elements are already in cache while accessed because these elements are likely stored in the same cache block. 
 
 In the naive algorithm the order is `b[column]->b[N + column]->b[2*N + column]` which are not stored next to eachother in memory.
 
 
 ## Tiled matrix multiplication
 The tiled implementation divides a matrix (N x N) in a number of tiles (tilesize x tilesize). 
-This way it repeatedly uses small blocks of matrix a and b that are stored next to eachother in memory so the chance that a called element is already in cache is way larger than for naive multiplication. 
+This way it repeatedly uses small working sets of matrix a, b and output, while those values are likely in the cache.
 
 
 For this example we have a 4x4 matrix that we split in tiles of 2x2. 
@@ -84,3 +84,5 @@ A (4x4 matrix divided by 3x3 tiles)
 [---------+---]          
 [ 1  1  0 | 2 ]           
 ```
+
+## Benchmarking methodology

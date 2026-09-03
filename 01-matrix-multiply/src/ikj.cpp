@@ -1,8 +1,7 @@
 #include <array>
 
-template<std::size_t N>
-std::array<int,N*N> ikj(const std::array<int,N*N>& a, const std::array<int,N*N>& b){
-    std::array<int,N*N> output{};
+std::vector<int> ikj(const std::vector<int>& a, const std::vector<int>& b, int N){
+    std::vector<int> output(N*N);
     for(int row = 0; row<N; row++){
         for(int num = 0; num<N; num++){
             for(int column = 0; column<N; column++){

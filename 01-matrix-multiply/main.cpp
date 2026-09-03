@@ -1,12 +1,15 @@
 #include <array>
 #include <iostream>
+#include <chrono>
+using namespace std::chrono;
 
 #include "src/naive.cpp"
 #include "src/ikj.cpp"
 #include "src/tiled.cpp"
+#include "src/generator.cpp"
+#include "src/benchmark.cpp"
 
-template<std::size_t N>
-void matrix_print(const std::array<int,N*N> &matrix){
+void print_matrix(const std::vector<int> &matrix, int N){
     std::cout<<"Matrix of size "<<N<<"x"<<N<<"\n";
     for(int row=0;row<N;row++){
         for(int column=0;column<N;column++){
@@ -14,22 +17,33 @@ void matrix_print(const std::array<int,N*N> &matrix){
         }
         std::cout<<"\n";
     }
+    std::cout<<"\n";
 }
 
 int main(void){
+    std::vector<int> a = generate_matrix(232323, 10);
+    std::vector<int> b = generate_matrix(1111, 10);
 
-    std::array<int,9> test1 = {1,0,0,0,1,0,0,0,1};
-    std::array<int,9> test2 = {5,2,9,3,4,8,2,9,6};
+    auto startnaive = steady_clock::now();
+    std::vector<int> naive_output = Naive(a,b,10);
+    auto endnaive = steady_clock::now();
+    auto naivetime = duration_cast<microseconds>(endnaive - startnaive);
 
-    auto testnaive = Naive<3>(test1,test2);
-    auto testikj = ikj<3>(test1,test2);
+    auto startikj = steady_clock::now();
+    std::vector<int> ikj_output = ikj(a,b,10);
+    auto endikj = steady_clock::now();
+    auto ikjtime = duration_cast<microseconds>(endikj - startikj);
 
-    std::array<int,16> test3 = {1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1};
-    std::array<int,16> test4 = {5,2,9,3,4,8,2,9,6,7,6,3,1,0,2,2};
-    auto testtiled = tiled<4>(test3,test4,3);
+    auto starttiled = steady_clock::now();
+    std::vector<int> tiled_output = tiled(a,b,10,2);
+    auto endtiled = steady_clock::now();
+    auto tiledtime = duration_cast<microseconds>(endtiled - starttiled);
 
-    std::array<int,16> a = {5,6,9,0,2,2,6,7,1,3,4,4,8,3,0,1};
-    std::array<int,16> b = {2,1,0,9,7,6,2,9,5,5,2,4,6,3,9,4};
-    auto output = tiled<4>(a,b,2);
-    matrix_print<4>(output);
+    // std::cout<<"Naive: "<<naivetime.count()<<"\n";
+    // std::cout<<"ikj: "<<ikjtime.count()<<"\n";
+    // std::cout<<"tiled: "<<tiledtime.count()<<"\n";
+    // int hulp = naive_output[1];
+    // int hulp2 = ikj_output[2];
+    // int hulp3 = tiled_output[3];
+    // std::cout<<hulp<<hulp2<<hulp3;
 }

@@ -1,12 +1,15 @@
-#include <array>
+#include <vector>
 
-template<std::size_t N>
-std::array<int,N*N> tiled(const std::array<int,N*N>& a, const std::array<int,N*N>& b, int tilesize){
+std::vector<int> tiled(const std::vector<int>& a, const std::vector<int>& b, int N, int tilesize){
+    if(a.size()!=N*N && b.size()!=N*N){
+        throw std::invalid_argument("Matrix sizes do not match");
+    }
+
     if((tilesize <= 0) || (tilesize > N)){
         throw std::invalid_argument("Tilesize out of range");
     }
 
-    std::array<int,N*N> output{};
+    std::vector<int> output(N*N);
     //looping tiles
     for(int tilerow = 0; tilerow < N; tilerow += tilesize){
         for(int k_row = 0; k_row < N; k_row += tilesize){
