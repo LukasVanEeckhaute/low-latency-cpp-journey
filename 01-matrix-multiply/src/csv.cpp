@@ -1,9 +1,9 @@
 #include "csv.hpp"
 
-int csv_write(std::vector<BenchmarkResult> results){
-    std::ofstream filee("result/benchmarks.csv",std::ios::trunc);
+int csv_write(std::vector<BenchmarkResult> results, const std::string& csv){
+    std::ofstream filee(csv,std::ios::trunc);
     filee.close();
-    std::ofstream file("results/benchmarks.csv", std::ios::app);
+    std::ofstream file(csv, std::ios::app);
 
     if(!file.is_open()){
         std::cerr<<"Could not open file\n";

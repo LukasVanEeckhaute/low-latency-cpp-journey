@@ -90,7 +90,7 @@ The multiplication is done on an AMD Ryzen AI 9 365 w/ Radeon 880M and 32GB RAM 
 
 The matrix sizes go from N=100 all the way up to N=1000 and for fixed matrix sizes the tilesize is also changed for the tiled multiplication (8-16-32-64-128 - ... - N/2). 
 
-The benchmark is done 20 times for each matrixsize and the median runtime is used to reduce the influence of scheduling noise and outliers.
+The benchmark is done 10 times for each matrixsize and the median runtime is used to reduce the influence of scheduling noise and outliers.
 
 To measure the runtime, std::chrono::steady_clock is used. Only the matrix multiplication is timed and all timings are measured in microseconds. 
 
@@ -99,3 +99,25 @@ The result of the multiplication is used after timing so the multiplication coul
 The tested matrices are randomly generated using `<random>` and for a given matrix size N, the matrices tested for the different methods are all the same. 
 
 ## Results
+### Overall performance
+![Runtime comparison](results/graphs/overall.png)
+The naive algorithm scales at roughly N**3.
+It's very clear that the naive algorithm is a lot slower for larger matrices coming in at 14,7 seconds for a 2500x2500 matrix.
+Followed by ikj at 2,53 seconds and tiled at 2,45 seconds.
+
+### ikj vs tiled
+![ikj-vs-tiled](results/graphs/ikj-vs-tiled.png)
+The tiled and ikj algorithms are very close because ikj already accesses matrix b and the output-matrix sequentially which is a huge win. For small matrix sizes where the tilesize is almost as big as the matrixsize, the performance of tiled is the same as ikj because they are essentially almost exactly the same at these size to tilesize ratio's.
+
+It's only for matrix sizes bigger than 2000 that there's a difference between the two because as N grows the working set increasingly exceeds cache capacity and that's when the extra temporal locality from tiling starts to matter.
+
+It's expected that for even larger matrices the difference will be bigger but because of timing constraints I couldn't run matrices larger than 2500x2500.
+
+
+### Tilesize comparison
+![tilesize-comparison](results/graphs/tilesize-comparison.png)
+For tilesizes lower than 100, the tiled algorithm is actually slower than the ikj-algorithm because overhead losses exceed tiled gains. 
+The overhead is primarily caused by:
+- boundary checks
+- more loop levels
+- smaller inner-loops

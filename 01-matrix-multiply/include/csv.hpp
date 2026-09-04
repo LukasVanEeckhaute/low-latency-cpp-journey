@@ -7,9 +7,7 @@
 
 #include "benchmark.hpp"
 
-bool isEmpty(const std::string& csv);
-
-int csv_write(std::vector<BenchmarkResult> results);
+int csv_write(std::vector<BenchmarkResult> results, const std::string& csv);
 
 
 #endif
