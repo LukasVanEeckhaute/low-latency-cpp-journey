@@ -92,7 +92,7 @@ The matrix sizes go from N=100 all the way up to N = 2500 and for fixed matrix s
 
 The benchmark is done 10 times for each matrixsize and the median runtime is used to reduce the influence of scheduling noise and outliers.
 
-To measure the runtime, std::chrono::steady_clock is used. Only the matrix multiplication is timed and all timings are measured in microseconds. 
+To measure the runtime, std::chrono::steady_clock is used. All timings are measured in microseconds. 
 
 The result of the multiplication is used after timing so the multiplication could not be optimized away by the compiler.
 

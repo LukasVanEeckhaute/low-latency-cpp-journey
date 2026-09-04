@@ -9,11 +9,12 @@ std::array<microseconds,3> Benchmark(const std::vector<int>& a, const std::vecto
     std::vector<microseconds> durations(repeats);
     std::array<microseconds,3> arr;
 
+    std::vector<int> output;
     if(type == "naive"){
         //benchmark
         for(int i = 0; i< repeats; i++){
             auto start = steady_clock::now();
-            std::vector<int> output = Naive(a,b,N);
+            output = Naive(a,b,N);
             auto end = steady_clock::now();
             auto duration = duration_cast<microseconds>(end - start);
             durations[i] = duration;
@@ -23,7 +24,7 @@ std::array<microseconds,3> Benchmark(const std::vector<int>& a, const std::vecto
         //benchmark
         for(int i = 0; i< repeats; i++){
             auto start = steady_clock::now();
-            std::vector<int> output = ikj(a,b,N);
+            output = ikj(a,b,N);
             auto end = steady_clock::now();
             auto duration = duration_cast<microseconds>(end - start);
             durations[i] = duration;
@@ -33,7 +34,7 @@ std::array<microseconds,3> Benchmark(const std::vector<int>& a, const std::vecto
         //benchmark
         for(int i = 0; i< repeats; i++){
             auto start = steady_clock::now();
-            std::vector<int> output = tiled(a,b,tilesize,N);
+            output = tiled(a,b,tilesize,N);
             auto end = steady_clock::now();
             auto duration = duration_cast<microseconds>(end - start);
             durations[i] = duration;
@@ -59,13 +60,12 @@ std::array<microseconds,3> Benchmark(const std::vector<int>& a, const std::vecto
         auto lower = durations[mid-1];
         median = (upper + lower)/2;
     }
-    // std::cout<<type<<" benchmark of matrix size "<<N<<" with "<<repeats<<" repeats\n";
-    // if(type == "tiled") std::cout<<"Tilesize= "<<tilesize<<"\n";
-    // std::cout<<"Median time= "<<median.count()<<" microseconds\n\n";
     
     arr[0] = min;
     arr[1] = median;
     arr[2] = max;
     
+    //uses output to prevent compiler from optimizing code away
+    std::cout<<output[N/2]<<"\n";
     return arr;
 }   

@@ -5,6 +5,7 @@
 #include <numeric>
 #include <algorithm>
 #include <random>
+#include <iostream>
 using namespace std::chrono;
 
 #include "multiplications.hpp"
